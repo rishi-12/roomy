@@ -8,7 +8,6 @@ import { styleConstants } from "../../constants/styleConstants";
 export default function Chat() {
   return (
     <>
-      <NavBar />
       <Container maxWidth={false} disableGutters>
         <Box sx={{ bgcolor: styleConstants.bg_color, height: "100vh" }} />
       </Container>
