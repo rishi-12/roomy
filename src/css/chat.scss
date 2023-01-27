@@ -1,0 +1,18 @@
+.chat {
+  height: 80vh;
+  width: 80%;
+  //   border: 1px solid red;
+  margin: 0 auto;
+  //   margin-top: 100px;
+
+  .contacts {
+    width: 30%;
+    // border: 1px solid green;
+    height: 100%;
+    background-color: #f8f9fa;
+  }
+
+  .messages {
+    width: 70%;
+  }
+}
