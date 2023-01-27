@@ -16,6 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import "../css/index.css";
+import { styleConstants } from "../constants/styleConstants";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -158,7 +159,7 @@ export default function NavBar() {
 
   return (
     <Box sx={{ flexGrow: 1, bgcolor: "red" }}>
-      <AppBar position="static" sx={{ bgcolor: "#00b894" }}>
+      <AppBar position="static" sx={{ bgcolor: styleConstants.navBar_color }}>
         <Toolbar>
           <IconButton
             size="large"
