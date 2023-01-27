@@ -16,7 +16,6 @@ import Typography from "@mui/material/Typography";
 export default function Chat() {
   return (
     <>
-      <NavBar />
       <Container
         sx={{ bgcolor: styleConstants.bg_color, height: "100vh", pt: "2em" }}
         maxWidth={false}
