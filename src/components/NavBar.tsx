@@ -176,7 +176,7 @@ export default function NavBar() {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            Collaberry
+            Roomy
           </Typography>
           <Search>
             <SearchIconWrapper>
