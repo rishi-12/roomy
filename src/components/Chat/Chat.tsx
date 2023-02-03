@@ -9,12 +9,16 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
+// import
 
 export default function Chat() {
+  // const [conversations, setConversations] = useState({
+
+  // })
   return (
     <>
       <Container
-        sx={{ bgcolor: styleConstants.bg_color, height: "100vh", pt: "2em" }}
+        sx={{ bgcolor: styleConstants.bg_color, minHeight: "100vh", pt: "2em" }}
         maxWidth={false}
         disableGutters
       >

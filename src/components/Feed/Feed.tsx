@@ -31,17 +31,27 @@ export default function Feed() {
     <React.Fragment>
       <CssBaseline />
       <Container
-        sx={{ bgcolor: styleConstants.bg_color, pt: "2em" }}
+        sx={{
+          bgcolor: styleConstants.bg_color,
+          pt: "2em",
+        }}
         maxWidth={false}
         disableGutters
       >
-        <Container sx={{ bgcolor: "#FFFFFF", pt: "2em" }}>
-          <Box>
-            {posts.map((v) => (
-              <Post {...v} />
-            ))}
-          </Box>
-        </Container>
+        {/* <Container sx={{ bgcolor: "#FFFFFF", pt: "2em" }}> */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
+          {posts.map((v) => (
+            <Post {...v} />
+          ))}
+        </Box>
+        {/* </Container> */}
       </Container>
     </React.Fragment>
   );
