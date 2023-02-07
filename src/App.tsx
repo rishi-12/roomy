@@ -3,6 +3,7 @@ import NavBar from "./components/NavBar";
 import Chat from "./components/Chat/Chat";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Feed from "./components/Feed/Feed";
+import Login from "./components/Login/Login";
 
 function PageWithNavBar() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <Route path="/" element={<Feed />} />
           <Route path="/messaging" element={<Chat />} />
         </Route>
-        {/* <Route path="/" element={<Login />}/> */}
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
