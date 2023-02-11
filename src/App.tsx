@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Feed from "./components/Feed/Feed";
 import Login from "./components/Login/Login";
 import NewPostForm from "./components/Feed/NewPostForm";
+import NewPostForm_ from "./components/Feed/NewPostForm_";
 
 function PageWithNavBar() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<Feed />} />
           <Route path="/messaging" element={<Chat />} />
           <Route path="/newPost" element={<NewPostForm />} />
+          <Route path="/newPost_" element={<NewPostForm_ />} />
         </Route>
         <Route path="/login" element={<Login />} />
       </Routes>

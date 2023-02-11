@@ -61,7 +61,7 @@ export default function Login() {
                 label="Password"
                 variant="standard"
               /> */}
-              <input type="password" />
+              <input type="password" placeholder="Password" />
             </Box>
           </div>
           <div className="login-button">

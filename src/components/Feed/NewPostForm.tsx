@@ -1,71 +1,3 @@
-// import { Button, Paper, Typography } from "@mui/material";
-// import Box from "@mui/material/Box";
-// import Container from "@mui/material/Container";
-// import TextField from "@mui/material/TextField";
-// import { useState } from "react";
-// import { styleConstants } from "../../constants/styleConstants";
-
-// No of roomates required + -
-// Address
-// Content
-// ImageUploads
-// export default function NewPostForm() {
-//   const [textValue, setTextValue] = useState<string>("");
-
-//   const onTextChange = (e: any) => setTextValue(e.target.value);
-//   const handleSubmit = () => console.log(textValue);
-//   const handleReset = () => setTextValue("");
-
-//   return (
-//     <Container
-//       sx={{
-//         bgcolor: styleConstants.bg_color,
-//         pt: "2em",
-//         alignItems: "center",
-//         justifyContent: "center",
-//       }}
-//       maxWidth={false}
-//       disableGutters
-//     >
-//       <Paper
-//         sx={{
-//           display: "flex",
-//           // alignItems: "center",
-//           // justifyContent: "center",
-//           flexDirection: "column",
-//           width: "60%",
-//         }}
-//       >
-//         <h2>Form Demo</h2>
-
-//         <TextField
-//           onChange={onTextChange}
-//           value={textValue}
-//           label={"Heading/Title"} //optional
-//           size="small"
-//         />
-//         <TextField
-//           onChange={onTextChange}
-//           value={textValue}
-//           label={"Address"} //optional
-//         />
-//         <TextField
-//           onChange={onTextChange}
-//           value={textValue}
-//           label={"Content"} //optional
-//         />
-//         <TextField
-//           onChange={onTextChange}
-//           value={textValue}
-//           label={"PhoneNo"} //optional
-//         />
-//         <Button onClick={handleSubmit}>Submit</Button>
-//         <Button onClick={handleReset}>Reset</Button>
-//       </Paper>
-//     </Container>
-//   );
-// }
-
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -73,6 +5,19 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
+import CssBaseline from "@mui/material/CssBaseline";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Toolbar from "@mui/material/Toolbar";
+import Paper from "@mui/material/Paper";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+// import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 function AddressForm() {
   return (
     <React.Fragment>
@@ -177,20 +122,6 @@ function AddressForm() {
     </React.Fragment>
   );
 }
-
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
-// import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function Copyright() {
   return (

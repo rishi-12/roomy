@@ -6,7 +6,6 @@ import Post, { POST } from "./Post";
 import Box from "@mui/material/Box";
 
 export default function Feed() {
-  //Will get post from API
   const posts: POST[] = [
     {
       userName: "Mighil Dath",
