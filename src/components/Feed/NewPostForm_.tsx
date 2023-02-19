@@ -4,38 +4,41 @@ import WomanIcon from "@mui/icons-material/Woman";
 import WcIcon from "@mui/icons-material/Wc";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
+import MDEditor from "@uiw/react-md-editor";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import "../../css/newPost.scss";
+import axiosConfig from "../Utils/axiosConfig";
 // import Typography from "@mui/material/Typography";
 import { styleConstants } from "../../constants/styleConstants";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Man } from "@mui/icons-material";
-
+import MarkDown from "./MarkDown";
 const steps = ["Shipping address", "Payment details", "Review your order"];
 
 const theme = createTheme();
 
 export default function NewPostForm() {
-  const [age, setAge] = React.useState("");
   const [gender, setGender] = React.useState("male");
+  const [address1, setAddress1] = React.useState("");
+  const [address2, setAddress2] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [state, setState] = React.useState("");
+  const [country, setCountry] = React.useState("");
+  const [pincode, setPincode] = React.useState("");
+  const [noOfRoommates, setNoOfRoommates] = React.useState(1);
   const [size, setSize] = React.useState("1 BHK");
   const [houseType, setHouseType] = React.useState("Flat");
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  };
+  const [rent, setRent] = React.useState("Flat");
+  const [postBody, setPostBody] = React.useState<string>("");
+  let userId = 1;
 
   const sizes = styleConstants.sizesList.map((item) => (
     <div
       className={size === item ? "newPost_size selected" : "newPost_size"}
-      onClick={() => handleSize(item)}
+      onClick={() => handleInput(setSize, item)}
     >
       {item}
     </div>
@@ -60,6 +63,47 @@ export default function NewPostForm() {
 
   const handleHouseType = (houseType: string) => {
     setHouseType(houseType);
+  };
+
+  const handleNoOfRoommates = (sign: String) => {
+    if (sign == "-") {
+      if (noOfRoommates > 1)
+        setNoOfRoommates(
+          (prevNoOfRoommates) => prevNoOfRoommates - 1
+        );
+    } else if (noOfRoommates < 5)
+      setNoOfRoommates(
+        (prevNoOfRoommates) => prevNoOfRoommates + 1
+      );
+  };
+
+  const handleInput = (setValue: Function, value: String) => {
+    setValue(value);
+  };
+
+  const onSubmit = async () => {
+    const postData = {
+      gender,
+      noOfRoommates,
+      address1,
+      address2,
+      city,
+      state,
+      pincode,
+      country,
+      size,
+      rent,
+      postBody,
+      userId,
+    };
+    console.log(postData);
+    try {
+      console.log("Post");
+      const res = await axiosConfig.post("/post", postData);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <React.Fragment>
@@ -139,9 +183,19 @@ export default function NewPostForm() {
               </div>
               <div className="newPost_input">
                 <div className="input-number">
-                  <button type="button">&minus;</button>
-                  <span>1</span>
-                  <button type="button">&#43;</button>
+                  <button
+                    type="button"
+                    onClick={() => handleNoOfRoommates("-")}
+                  >
+                    &minus;
+                  </button>
+                  <span>{noOfRoommates}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleNoOfRoommates("+")}
+                  >
+                    &#43;
+                  </button>
                 </div>
               </div>
             </div>
@@ -159,6 +213,8 @@ export default function NewPostForm() {
                     fullWidth
                     autoComplete="shipping address-line1"
                     variant="standard"
+                    value={address1}
+                    onChange={(e) => handleInput(setAddress1, e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -169,6 +225,8 @@ export default function NewPostForm() {
                     fullWidth
                     autoComplete="shipping address-line2"
                     variant="standard"
+                    value={address2}
+                    onChange={(e) => handleInput(setAddress2, e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -180,6 +238,8 @@ export default function NewPostForm() {
                     fullWidth
                     autoComplete="shipping address-level2"
                     variant="standard"
+                    value={city}
+                    onChange={(e) => handleInput(setCity, e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -189,6 +249,8 @@ export default function NewPostForm() {
                     label="State/Province/Region"
                     fullWidth
                     variant="standard"
+                    value={state}
+                    onChange={(e) => handleInput(setState, e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -200,6 +262,8 @@ export default function NewPostForm() {
                     fullWidth
                     autoComplete="shipping postal-code"
                     variant="standard"
+                    value={pincode}
+                    onChange={(e) => handleInput(setPincode, e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -211,6 +275,8 @@ export default function NewPostForm() {
                     fullWidth
                     autoComplete="shipping country"
                     variant="standard"
+                    value={country}
+                    onChange={(e) => handleInput(setCountry, e.target.value)}
                   />
                 </Grid>
               </Grid>
@@ -225,48 +291,40 @@ export default function NewPostForm() {
             </div>
             <div className="newPost_col">
               <div className="newPost_label">
-                <p>House Type</p>
+                <p>Rent</p>
               </div>
-              <div className="newPost_input">{houseTypes}</div>
-            </div>
-          </div>
-          <div className="newPost_row">
-            <div className="newPost_address">
               <Grid container spacing={2}>
-                <Grid item xs={8} sm={4}>
+                <Grid item xs={8} sm={12}>
                   <TextField
                     required
-                    id="deposit"
-                    name="deposit"
-                    label="deposit"
-                    fullWidth
-                    type="number"
-                    autoComplete="shipping address-level2"
-                    variant="standard"
-                  />
-                </Grid>
-                <Grid item xs={8} sm={4}>
-                  <TextField
                     id="rent"
-                    type="number"
                     name="rent"
                     label="rent"
                     fullWidth
-                    variant="standard"
-                  />
-                </Grid>
-                <Grid item xs={8} sm={4}>
-                  <TextField
-                    id="maintenance"
-                    name="maintenance"
-                    label="maintenance"
-                    fullWidth
                     type="number"
+                    autoComplete="shipping address-level2"
+                    value={rent}
+                    onChange={(e) => handleInput(setRent, e.target.value)}
                     variant="standard"
                   />
                 </Grid>
               </Grid>
             </div>
+          </div>
+
+          <div className="newPost_markdown">
+            <MarkDown postBody={postBody} setPostBody={setPostBody} />
+          </div>
+          <div className="newPost_row">
+            <Button
+              variant="contained"
+              onClick={() => onSubmit()}
+              style={{
+                backgroundColor: "#b197fc",
+              }}
+            >
+              Create Post
+            </Button>
           </div>
         </div>
       </Container>
