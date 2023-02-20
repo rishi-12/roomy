@@ -1,200 +1,333 @@
 import * as React from "react";
+import ManIcon from "@mui/icons-material/Man";
+import WomanIcon from "@mui/icons-material/Woman";
+import WcIcon from "@mui/icons-material/Wc";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-
+import MDEditor from "@uiw/react-md-editor";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
+import Container from "@mui/material/Container";
+import "../../css/newPost.scss";
+import axiosConfig from "../Utils/axiosConfig";
 // import Typography from "@mui/material/Typography";
+import { styleConstants } from "../../constants/styleConstants";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-function AddressForm() {
-  return (
-    <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        New Post
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="firstName"
-            name="firstName"
-            label="First name"
-            fullWidth
-            autoComplete="given-name"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="lastName"
-            name="lastName"
-            label="Last name"
-            fullWidth
-            autoComplete="family-name"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            required
-            id="address1"
-            name="address1"
-            label="Address line 1"
-            fullWidth
-            autoComplete="shipping address-line1"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="address2"
-            name="address2"
-            label="Address line 2"
-            fullWidth
-            autoComplete="shipping address-line2"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="city"
-            name="city"
-            label="City"
-            fullWidth
-            autoComplete="shipping address-level2"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            id="state"
-            name="state"
-            label="State/Province/Region"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="zip"
-            name="zip"
-            label="Zip / Postal code"
-            fullWidth
-            autoComplete="shipping postal-code"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="country"
-            name="country"
-            label="Country"
-            fullWidth
-            autoComplete="shipping country"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox color="secondary" name="saveAddress" value="yes" />
-            }
-            label="Use this address for payment details"
-          />
-        </Grid>
-      </Grid>
-    </React.Fragment>
-  );
-}
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
+import { Man } from "@mui/icons-material";
+import MarkDown from "./MarkDown";
 const steps = ["Shipping address", "Payment details", "Review your order"];
 
 const theme = createTheme();
 
 export default function NewPostForm() {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [gender, setGender] = React.useState("male");
+  const [address1, setAddress1] = React.useState("");
+  const [address2, setAddress2] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [state, setState] = React.useState("");
+  const [country, setCountry] = React.useState("");
+  const [pincode, setPincode] = React.useState("");
+  const [noOfRoommates, setNoOfRoommates] = React.useState(1);
+  const [size, setSize] = React.useState("1 BHK");
+  const [houseType, setHouseType] = React.useState("Flat");
+  const [rent, setRent] = React.useState("Flat");
+  const [postBody, setPostBody] = React.useState<string>("");
+  let userId = 1;
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const sizes = styleConstants.sizesList.map((item) => (
+    <div
+      className={size === item ? "newPost_size selected" : "newPost_size"}
+      onClick={() => handleInput(setSize, item)}
+    >
+      {item}
+    </div>
+  ));
+
+  const houseTypes = styleConstants.houseList.map((item) => (
+    <div
+      className={houseType === item ? "newPost_size selected" : "newPost_size"}
+      onClick={() => handleHouseType(item)}
+    >
+      {item}
+    </div>
+  ));
+
+  const handleGender = (gender: string) => {
+    setGender(gender);
   };
 
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
+  const handleSize = (size: string) => {
+    setSize(size);
   };
 
+  const handleHouseType = (houseType: string) => {
+    setHouseType(houseType);
+  };
+
+  const handleNoOfRoommates = (sign: String) => {
+    if (sign == "-") {
+      if (noOfRoommates > 1)
+        setNoOfRoommates(
+          (prevNoOfRoommates) => prevNoOfRoommates - 1
+        );
+    } else if (noOfRoommates < 5)
+      setNoOfRoommates(
+        (prevNoOfRoommates) => prevNoOfRoommates + 1
+      );
+  };
+
+  const handleInput = (setValue: Function, value: String) => {
+    setValue(value);
+  };
+
+  const onSubmit = async () => {
+    const postData = {
+      gender,
+      noOfRoommates,
+      address1,
+      address2,
+      city,
+      state,
+      pincode,
+      country,
+      size,
+      rent,
+      postBody,
+      userId,
+    };
+    console.log(postData);
+    try {
+      console.log("Post");
+      const res = await axiosConfig.post("/post", postData);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
-    <ThemeProvider theme={theme}>
+    <React.Fragment>
       <CssBaseline />
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
+      <Container
         sx={{
-          position: "relative",
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
+          bgcolor: styleConstants.bg_color,
+          pt: "2em",
+          // border: "1px solid red",
+          minHeight: "95vh",
+          // display: "flex",
         }}
+        maxWidth={false}
+        disableGutters
       >
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
-          <Typography component="h2" variant="h4" align="center">
-            Lets Find a Roomy
-          </Typography>
-          <React.Fragment>
-            <AddressForm />
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button onClick={() => {}} sx={{ mt: 3, ml: 1 }}>
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => {}}
-                sx={{ mt: 3, ml: 1 }}
-              >
-                Post
-              </Button>
-            </Box>
-          </React.Fragment>
-        </Paper>
-        <Copyright />
+        <div className="newPost_header">
+          <h1>Find a roomie</h1>
+        </div>
+        <div className="newPost_form">
+          {/* <FormControl sx={{ width: "60%" }}>
+            <InputLabel id="demo-simple-select-label">
+              Room mate gender
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={age}
+              label="gender"
+              onChange={handleChange}
+            >
+              <MenuItem value={"Male"}>Male</MenuItem>
+              <MenuItem value={"Female"}>Female</MenuItem>
+              <MenuItem value={"Either"}>Either</MenuItem>
+            </Select>
+          </FormControl> */}
+          <div className="newPost_row">
+            <div className="newPost_col">
+              <div className="newPost_label">
+                <p>Select Your Roommate Preference</p>
+              </div>
+              <div className="newPost_input">
+                <div
+                  className={
+                    gender === "female"
+                      ? "gender_icon selected_gender"
+                      : "gender_icon"
+                  }
+                  onClick={() => handleGender("female")}
+                >
+                  <WomanIcon fontSize="large" />
+                </div>
+                <div
+                  className={
+                    gender === "male"
+                      ? "gender_icon selected_gender"
+                      : "gender_icon"
+                  }
+                  onClick={() => handleGender("male")}
+                >
+                  <ManIcon fontSize="large" />
+                </div>
+                <div
+                  className={
+                    gender === "any"
+                      ? "gender_icon selected_gender"
+                      : "gender_icon"
+                  }
+                  onClick={() => handleGender("any")}
+                >
+                  <WcIcon fontSize="large" />
+                </div>
+              </div>
+            </div>
+            <div className="newPost_col">
+              <div className="newPost_label">
+                <p>Number of roommates required</p>
+              </div>
+              <div className="newPost_input">
+                <div className="input-number">
+                  <button
+                    type="button"
+                    onClick={() => handleNoOfRoommates("-")}
+                  >
+                    &minus;
+                  </button>
+                  <span>{noOfRoommates}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleNoOfRoommates("+")}
+                  >
+                    &#43;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="newPost_row">
+            <div className="newPost_address">
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    id="address1"
+                    name="address1"
+                    label="Address line 1"
+                    fullWidth
+                    autoComplete="shipping address-line1"
+                    variant="standard"
+                    value={address1}
+                    onChange={(e) => handleInput(setAddress1, e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="address2"
+                    name="address2"
+                    label="Address line 2"
+                    fullWidth
+                    autoComplete="shipping address-line2"
+                    variant="standard"
+                    value={address2}
+                    onChange={(e) => handleInput(setAddress2, e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    id="city"
+                    name="city"
+                    label="City"
+                    fullWidth
+                    autoComplete="shipping address-level2"
+                    variant="standard"
+                    value={city}
+                    onChange={(e) => handleInput(setCity, e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="state"
+                    name="state"
+                    label="State/Province/Region"
+                    fullWidth
+                    variant="standard"
+                    value={state}
+                    onChange={(e) => handleInput(setState, e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    id="zip"
+                    name="zip"
+                    label="Zip / Postal code"
+                    fullWidth
+                    autoComplete="shipping postal-code"
+                    variant="standard"
+                    value={pincode}
+                    onChange={(e) => handleInput(setPincode, e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    id="country"
+                    name="country"
+                    label="Country"
+                    fullWidth
+                    autoComplete="shipping country"
+                    variant="standard"
+                    value={country}
+                    onChange={(e) => handleInput(setCountry, e.target.value)}
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          </div>
+          <div className="newPost_row">
+            <div className="newPost_col">
+              <div className="newPost_label">
+                <p>House Size</p>
+              </div>
+              <div className="newPost_input">{sizes}</div>
+            </div>
+            <div className="newPost_col">
+              <div className="newPost_label">
+                <p>Rent</p>
+              </div>
+              <Grid container spacing={2}>
+                <Grid item xs={8} sm={12}>
+                  <TextField
+                    required
+                    id="rent"
+                    name="rent"
+                    label="rent"
+                    fullWidth
+                    type="number"
+                    autoComplete="shipping address-level2"
+                    value={rent}
+                    onChange={(e) => handleInput(setRent, e.target.value)}
+                    variant="standard"
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          </div>
+
+          <div className="newPost_markdown">
+            <MarkDown postBody={postBody} setPostBody={setPostBody} />
+          </div>
+          <div className="newPost_row">
+            <Button
+              variant="contained"
+              onClick={() => onSubmit()}
+              style={{
+                backgroundColor: "#b197fc",
+              }}
+            >
+              Create Post
+            </Button>
+          </div>
+        </div>
       </Container>
-    </ThemeProvider>
+    </React.Fragment>
   );
 }
