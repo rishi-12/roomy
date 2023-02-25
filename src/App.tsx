@@ -4,7 +4,7 @@ import Chat from "./components/Chat/Chat";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Feed from "./components/Feed/Feed";
 import Login from "./components/Login/Login";
-import NewPostForm from "./components/Feed/NewPostForm";
+import NewPostForm from "./components/NewPost/NewPostForm";
 
 function PageWithNavBar() {
   return (

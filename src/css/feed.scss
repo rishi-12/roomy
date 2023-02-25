@@ -1,0 +1,75 @@
+$highlight-color: #b197fc;
+$item-color: #ebfbee;
+.post-info {
+  // border: 1px solid red;
+  width: 85%;
+  margin-left: 30px;
+}
+
+.post-info__row {
+  width: 100%;
+  // border: 1px solid green;
+  min-height: 70px;
+  display: flex;
+  margin-bottom: 30px;
+  justify-content: space-around;
+}
+
+.post-info__item {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  max-height: 100%;
+  // border: 1px solid orange;
+  width: 40%;
+  background-color: $item-color;
+  padding-bottom: 10px;
+}
+
+.post-info__label {
+  width: 100%;
+  text-align: center;
+  color: #2d3436;
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.post-info__body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // border: 1px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.post-info__roommates {
+  font-size: 25px;
+}
+
+.address_body {
+  width: 100%;
+  padding-left: 30px;
+}
+
+.post-info__address_display {
+  display: block;
+}
+
+.address_label {
+  text-align: left;
+}
+
+.post-info__gender {
+  // border: 1px solid yellow;
+  padding: 6px;
+  cursor: pointer;
+  width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $highlight-color;
+}

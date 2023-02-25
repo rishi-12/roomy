@@ -2,10 +2,10 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
+import Button from "@mui/material/Button";
+import ReactMarkdown from "react-markdown";
 import Avatar from "@mui/material/Avatar";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -13,14 +13,40 @@ import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ManIcon from "@mui/icons-material/Man";
+import WomanIcon from "@mui/icons-material/Woman";
+import WcIcon from "@mui/icons-material/Wc";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 //need to add ImageLinks if any, no of roomates looking for
 export interface POST {
+  address?: ADDRESS;
+  postId?: string;
+  user?: USER;
+  postBody?: string;
+  gender?: string;
+  size?: string;
+  date?: string;
+  rent?: number;
+  noOfRoommates?: number;
+  noOfFilledRoommates?: 0;
+}
+
+interface ADDRESS {
+  addressId: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  country: string;
+  pincode: string;
+}
+
+interface USER {
   userId: string;
-  userName: string;
-  postBody: string;
-  date: string;
+  username: string;
+  name: string;
+  email: string;
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -45,35 +71,112 @@ export default function Post(props: POST) {
     setExpanded(!expanded);
   };
 
+  const genderIcon = () => {
+    // console.log(`GENDER = ${props.gender}`);
+    let sx = {
+      fontSize: "28px",
+    };
+    if (props?.gender == null) return <></>;
+
+    if (props.gender == "male") return <ManIcon sx={sx} />;
+    else if (props.gender == "female") return <WomanIcon sx={sx} />;
+    return <WcIcon sx={sx} />;
+  };
+
   return (
-    <Card sx={{ maxWidth: "60%", mb: "2em" }}>
+    <Card sx={{ width: "55%", mb: "2em" }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[300] }} aria-label="recipe">
-            {props.userName[0]}
+            {props?.user?.name.charAt(0)}
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
+          <Button
+            variant="contained"
+            // onClick={() => onSubmit()}
+            style={{
+              backgroundColor: "#b197fc",
+            }}
+          >
+            Connect
+          </Button>
         }
-        title={props.userName}
-        subheader={props.date}
+        title={props?.user?.name}
+        subheader={
+          props.date &&
+          new Date(props?.date).toLocaleDateString("en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+          })
+        }
       />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
-        </Typography>
+      <CardContent
+        sx={{
+          margin: "20px 30px 20px 0px",
+          // border: "1px solid black",
+          padding: 0,
+          paddingLeft: "30px",
+        }}
+      >
+        <ReactMarkdown children={props?.postBody ? props?.postBody : ""} />
       </CardContent>
-      <CardMedia
-        component="img"
-        height="194"
-        image="/static/images/cards/paella.jpg"
-        alt="Paella dish"
-      />
+
+      <div className="post-info">
+        <div className="post-info__row">
+          <div className="post-info__item address_body">
+            <div className="post-info__label address_label">Address</div>
+            <div className="post-info__body post-info__address_display">
+              <p>{props?.address != null && props?.address.address1}</p>
+              <p>{props?.address != null && props?.address.address2}</p>
+              <p>
+                {props?.address != null &&
+                  props?.address.city + ", " + props.address.state}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="post-info__row">
+          <div className="post-info__item">
+            <div className="post-info__label">Preferred Gender</div>
+            <div className="post-info__body">
+              <div className="post-info__gender">{genderIcon()}</div>
+            </div>
+          </div>
+          <div className="post-info__item">
+            <div className="post-info__label">Number of roommates needed</div>
+            <div className="post-info__body">
+              <p className="post-info__roommates">
+                {props?.noOfRoommates != null &&
+                props?.noOfFilledRoommates != null
+                  ? props?.noOfRoommates - props?.noOfFilledRoommates
+                  : 0}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="post-info__row">
+          <div className="post-info__item">
+            <div className="post-info__label">House Size</div>
+            <div className="post-info__body">
+              <div className="newPost_size selected">
+                {props != null && props.size}
+              </div>
+            </div>
+          </div>
+          <div className="post-info__item">
+            <div className="post-info__label">Rent</div>
+            <div className="post-info__body">
+              <p className="post-info__roommates">
+                {"₹ " + (props?.rent != null ? props?.rent : 0)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />

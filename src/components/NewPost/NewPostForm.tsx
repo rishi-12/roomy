@@ -33,7 +33,7 @@ export default function NewPostForm() {
   const [houseType, setHouseType] = React.useState("Flat");
   const [rent, setRent] = React.useState("Flat");
   const [postBody, setPostBody] = React.useState<string>("");
-  let userId = 1;
+  let userId = "40cd1e5f-a8b7-43aa-88d5-5fe39e3a4098";
 
   const sizes = styleConstants.sizesList.map((item) => (
     <div
@@ -68,13 +68,9 @@ export default function NewPostForm() {
   const handleNoOfRoommates = (sign: String) => {
     if (sign == "-") {
       if (noOfRoommates > 1)
-        setNoOfRoommates(
-          (prevNoOfRoommates) => prevNoOfRoommates - 1
-        );
+        setNoOfRoommates((prevNoOfRoommates) => prevNoOfRoommates - 1);
     } else if (noOfRoommates < 5)
-      setNoOfRoommates(
-        (prevNoOfRoommates) => prevNoOfRoommates + 1
-      );
+      setNoOfRoommates((prevNoOfRoommates) => prevNoOfRoommates + 1);
   };
 
   const handleInput = (setValue: Function, value: String) => {

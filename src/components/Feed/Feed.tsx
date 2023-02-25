@@ -1,31 +1,24 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import { styleConstants } from "../../constants/styleConstants";
 import Post, { POST } from "./Post";
 import Box from "@mui/material/Box";
+import axiosConfig from "../Utils/axiosConfig";
+import "../../css/feed.scss";
 
 export default function Feed() {
-  const posts: POST[] = [
-    {
-      userName: "Mighil Dath",
-      userId: "mighil",
-      postBody: "content1",
-      date: "September 16, 2022",
-    },
-    {
-      userName: "Rishinath T M",
-      userId: "rishi",
-      postBody: "content2",
-      date: "September 15, 2022",
-    },
-    {
-      userName: "Vishaal Karthik M",
-      userId: "vishal",
-      postBody: "content3",
-      date: "September 17, 2022",
-    },
-  ];
+  let [feedData, setFeedData] = useState<POST[]>([]);
+
+  useEffect(() => {
+    const getFeedData = async () => {
+      const data = await axiosConfig.get("/posts");
+      console.log(data.data);
+      setFeedData(data.data);
+    };
+    getFeedData();
+  }, []);
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -33,6 +26,7 @@ export default function Feed() {
         sx={{
           bgcolor: styleConstants.bg_color,
           pt: "2em",
+          minHeight: "90vh",
         }}
         maxWidth={false}
         disableGutters
@@ -46,9 +40,8 @@ export default function Feed() {
             flexDirection: "column",
           }}
         >
-          {posts.map((v) => (
-            <Post {...v} />
-          ))}
+          {feedData.length >= 1 &&
+            feedData.map((v) => <Post key={v.postId} {...v} />)}
         </Box>
         {/* </Container> */}
       </Container>
